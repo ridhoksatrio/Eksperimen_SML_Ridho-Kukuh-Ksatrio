@@ -22,7 +22,7 @@ jobs:
 
       - name: Run Automate Script
         run: |
-          python preprocessing/automate_Ridho.py
+          python preprocessing/automate_Ridho Kukuh Ksatrio.py
 
       - name: Upload Cleaned Dataset
         uses: actions/upload-artifact@v4
