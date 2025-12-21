@@ -38,4 +38,7 @@ def run_preprocessing(input_path, output_folder):
     print(f"Berhasil! Data disimpan di: {output_path}")
 
 if __name__ == "__main__":
-    run_preprocessing('spotify_analysis_dataset.csv', 'preprocessing/dataset_processed')
+    run_preprocessing(
+        input_path='spotify_analysis_dataset.csv', 
+        output_folder='preprocessing'
+    )
