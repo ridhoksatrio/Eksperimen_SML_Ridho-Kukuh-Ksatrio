@@ -19,7 +19,7 @@ def run_preprocessing(input_path, output_folder):
         else: return 2
     df['pop_category'] = df['popularity'].apply(categorize_popularity)
 
-
+  
     cols_to_drop = ['track_id', 'track_name', 'artist', 'album', 'release_date', 'popularity']
     df_model = df.drop(cols_to_drop, axis=1)
 
@@ -40,7 +40,6 @@ def run_preprocessing(input_path, output_folder):
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
 
-
     train_df = pd.DataFrame(X_train_scaled, columns=X.columns)
     train_df['pop_category'] = y_train.values
     train_df['set_type'] = 'train'
@@ -50,6 +49,7 @@ def run_preprocessing(input_path, output_folder):
     test_df['set_type'] = 'test'
 
     final_df = pd.concat([train_df, test_df], axis=0)
+
 
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
