@@ -3,10 +3,12 @@ name: Auto Preprocessing Spotify
 on:
   push:
     branches: [ main ]
+  workflow_dispatch: # Memungkinkan Anda menjalankan manual jika perlu
 
 jobs:
   run-preprocessing-job:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -21,13 +23,13 @@ jobs:
           pip install pandas scikit-learn
 
       - name: Run Automate Script
-        # Gunakan tanda kutip dua (") karena nama file Anda mengandung spasi
         run: |
+          # Menjalankan script python di dalam folder preprocessing
           python "preprocessing/automate_Ridho.py"
 
       - name: Upload Cleaned Dataset
+        # Langkah ini wajib untuk mendapatkan nilai Advance (Artifact)
         uses: actions/upload-artifact@v4
         with:
           name: dataset-spotify-bersih
-          # Gunakan tanda kutip juga untuk path output agar aman
-          path: "preprocessing/spotify_preprocessing.csv"
+          path: preprocessing/spotify_preprocessing.csv
