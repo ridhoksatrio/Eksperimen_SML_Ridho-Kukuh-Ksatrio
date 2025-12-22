@@ -3,7 +3,7 @@ name: Auto Preprocessing Spotify
 on:
   push:
     branches: [ main ]
-  workflow_dispatch: # Memungkinkan Anda menjalankan manual jika perlu
+  workflow_dispatch:
 
 jobs:
   run-preprocessing-job:
@@ -24,12 +24,12 @@ jobs:
 
       - name: Run Automate Script
         run: |
-          # Menjalankan script python di dalam folder preprocessing
-          python "preprocessing/automate_Ridho.py"
+          # Nama file harus sama persis dengan yang ada di folder preprocessing
+          python "preprocessing/automate_Ridho Kukuh Ksatrio.py"
 
       - name: Upload Cleaned Dataset
-        # Langkah ini wajib untuk mendapatkan nilai Advance (Artifact)
         uses: actions/upload-artifact@v4
         with:
           name: dataset-spotify-bersih
+          # Path ini harus sama dengan output_path di script python
           path: preprocessing/spotify_preprocessing.csv
