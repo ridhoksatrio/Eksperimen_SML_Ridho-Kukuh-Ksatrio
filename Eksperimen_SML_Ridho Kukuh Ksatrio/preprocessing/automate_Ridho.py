@@ -1,47 +1,40 @@
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
 import os
 
-def run_preprocessing(input_path, output_folder):
-    # Baca data
-    df = pd.read_csv(input_path)
-    df = df.dropna()
+def run_preprocessing():
+    # 1. Tentukan path file
+    input_file = 'spotify_analysis_dataset.csv'
+    output_folder = 'preprocessing'
+    output_file = os.path.join(output_folder, 'spotify_preprocessing.csv')
 
-    # Kategori Popularitas (Spotify)
-    def categorize_popularity(score):
-        if score <= 33: return 0
-        elif score <= 66: return 1
-        else: return 2
-    df['pop_category'] = df['popularity'].apply(categorize_popularity)
+    print("Memulai proses preprocessing...")
 
-    # Drop metadata
-    cols_to_drop = ['track_id', 'track_name', 'artist', 'album', 'release_date', 'popularity']
-    df_model = df.drop(cols_to_drop, axis=1)
+    # 2. Cek apakah file input ada
+    if not os.path.exists(input_file):
+        print(f"Error: File {input_file} tidak ditemukan di root repository!")
+        return
 
-    X = df_model.drop('pop_category', axis=1)
-    y = df_model['pop_category']
-
-    # Split & Scale
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-
-    # DataFrame Bersih
-    cleaned_df = pd.DataFrame(X_train_scaled, columns=X.columns)
-    cleaned_df['pop_category'] = y_train.values
-
-    # Buat folder jika belum ada
-    os.makedirs(output_folder, exist_ok=True)
+    # 3. Baca Dataset
+    df = pd.read_csv(input_file)
     
-    # Simpan
-    output_path = os.path.join(output_folder, 'spotify_cleaned.csv')
-    cleaned_df.to_csv(output_path, index=False)
-    print(f"Berhasil! Data disimpan di: {output_path}")
+    # 4. Proses Preprocessing Sederhana
+    # Menghapus missing values
+    df_cleaned = df.dropna()
+    
+    # Contoh transformasi: Membuat kategori popularitas (0, 1, 2)
+    if 'popularity' in df_cleaned.columns:
+        def categorize(score):
+            if score <= 33: return 0
+            elif score <= 66: return 1
+            else: return 2
+        df_cleaned['pop_category'] = df_cleaned['popularity'].apply(categorize)
+
+    # 5. Pastikan folder output ada
+    os.makedirs(output_folder, exist_ok=True)
+
+    # 6. Simpan hasil ke file CSV
+    df_cleaned.to_csv(output_file, index=False)
+    print(f"Berhasil! Dataset bersih disimpan di: {output_file}")
 
 if __name__ == "__main__":
-    # Menyesuaikan input (raw) dan output (path yang Anda berikan)
-    run_preprocessing(
-        input_path='spotify_analysis_dataset.csv', 
-        output_folder='preprocessing'
-    )
+    run_preprocessing()
